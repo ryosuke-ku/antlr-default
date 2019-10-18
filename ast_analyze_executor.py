@@ -4,9 +4,7 @@ from ast.basic_info_listener import BasicInfoListener
 
 
 if __name__ == '__main__':
-    # target_file_path = 'C:/pbl/home/junit/src/test/java/jp/enpit/cloud/junit/CalculatorTest.java'
-    target_file_path = 'C:/Users/ryosuke-ku/Desktop/NiCad-5.1/systems/maven/maven-model-builder/src/test/java/org/apache/maven/model/interpolation/StringSearchModelInterpolatorTest.java'
-    # target_file_path = 'C:/Users/ryosuke-ku/Desktop/NiCad-5.1/systems/maven/maven-model-builder/src/main/java/org/apache/maven/model/interpolation/StringSearchModelInterpolator.java'
+    target_file_path = '解析対象のファイルパス'
 
     # ★ポイント１
     ast_info = AstProcessor(None, BasicInfoListener()).execute(target_file_path)
