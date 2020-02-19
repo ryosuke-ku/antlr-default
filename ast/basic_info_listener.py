@@ -7,12 +7,10 @@ class BasicInfoListener(JavaParserListener):
 
     # ★ポイント４
     def __init__(self):
-        self.call_methods = []
-        self.ast_info = {
-            'methods': []
-        }
-        self.called_methods =defaultdict(list)
+        self.called_methods = defaultdict(list)
         self.methods = []
+        self.classes = []
+        self.calledMethodToMethod = defaultdict(list)
 
     def enterMethodDeclaration(self, ctx:JavaParser.MethodDeclarationContext):
 
@@ -30,27 +28,26 @@ class BasicInfoListener(JavaParserListener):
         startline_number = str(ctx.start.line)
         endline_number = str(ctx.stop.line)
 
-        method_info = {
-            # 'returnType': c1,
-            'methodName': c2,
-            # 'params': params,
-            'callMethods': self.call_methods
-        }
-        self.ast_info['methods'].append(method_info)
-        self.called_methods[c2].append(self.call_methods)
-        self.methods.append(startline_number + ' ' +  endline_number + ' ' + c2)
+        # print(c2)
+        for calledMethod in self.call_methods:
+            self.calledMethodToMethod[calledMethod] = c2
+        
+
 
     def enterMethodCall(self, ctx:JavaParser.MethodCallContext):
         cmName = ctx.parentCtx.getText()
+        # print(cmName)
         if 'assert' in ctx.parentCtx.getText():
             pass
         else:
-            s = cmName.rfind('.')
-            editcmName = cmName[s+1:]
+            calledMethod = cmName[cmName.rfind('.')+1:][:cmName[cmName.rfind('.')+1:].find('(')]
+            print(calledMethod)
+            self.call_methods.append(calledMethod)
+            print(self.call_methods)
 
-            b = editcmName.find('(')
-            fincmName = editcmName[:b]
-            # print(fincmName)
-            self.call_methods.append(fincmName)
+    # Enter a parse tree produced by JavaParser#classDeclaration.
+    def enterClassDeclaration(self, ctx:JavaParser.ClassDeclarationContext):        # self.mapClassToMethod = defaultdict(list)
+        className = ctx.getChild(1).getText()  # ---> class name
+        # print('class name : ' + className)
 
-
+      
